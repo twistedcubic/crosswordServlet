@@ -2,7 +2,7 @@ package crossword;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
@@ -17,12 +17,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import crossword.Crossword.PuzzleNodeCoordinates;
+
 @WebServlet("/crossword")
 public class CrosswordServlet extends HttpServlet {
-		
 	
-	
-	
+	private static final long serialVersionUID = -4973253881670428154L;
+
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -30,20 +31,19 @@ public class CrosswordServlet extends HttpServlet {
 	} 
 	
 	 @Override
-		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			// run jar, put result in response
 			
 			response.setContentType("application/json");
 			//get the session corresponding to the this request, depending on 
 			//user data such as IP probably. If no session associated with this 
 			//user yet, create a new session for this user.
-			HttpSession curSession = request.getSession();
+			//HttpSession curSession = request.getSession();
 			
 			/*
 			 * rowCoordinatesList, colCoordinatesList,
 					labelList, horIntWordMap, verIntWordMap
 			 */
-			
 			
 			PrintWriter responseWriter = response.getWriter();
 			
@@ -53,15 +53,14 @@ public class CrosswordServlet extends HttpServlet {
 			//logger.info("inputStr: " + inputStr);
 			
 			if(wordsAr == null || wordsAr.length == 0) return;
-			
-			
-PuzzleCoordinates;
+			List<PuzzleNodeCoordinates> coordinatesList 
+				= Crossword.processSet(Arrays.asList(wordsAr));
 			
 			/*Gson gson = new GsonBuilder().create();
 			java.lang.reflect.Type listType = new TypeToken<ArrayList<Integer>>() {}.getType();
 			String json = gson.toJson( , listType);*/
 			
-			String parsedJson = new Gson().toJson(parsedList, responseWriter);
+			new Gson().toJson(coordinatesList, responseWriter);
 			
 			
 		}

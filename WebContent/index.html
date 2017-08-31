@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<!--crossword server frontend-->
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Math Search</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- <link rel="stylesheet" href="assets/css/main.css" /> -->
+<link rel="stylesheet" href="css/main.css" />
+
+<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+<script type="text/javascript"
+	src="MathJax-2-6/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full"></script>
+</head>
+<body class="landing">
+
+	<!-- Header -->
+	<header id="header" class="alt">
+		<h1>
+			<a href="index.html">Crossword Puzzle</a>
+		</h1>
+	</header>
+
+	<section id="banner" class="wrapper special">
+		<div class="inner">
+			<form class="inputForm" id="inputForm">
+				<div class="row uniform 50%">
+					<div class="12u$">
+						<!--<textarea name="text" name="inputString" id="inputString" rows="2"></textarea>-->
+						<input type="text" name="inputString" id="inputString"  />
+					</div>
+				</div>
+				<ul class="actions">
+					<li><input type="submit" name="submitInputBtn" class="special"
+						id="enterString" value="Search" /></li>
+					<li><input type="button" name="clearOutputBtn" class="special" id="clearOutput"
+						value="Clear" /></li>
+				</ul>
+			</form>
+		</div>
+		<hr />
+		<div id="container" class="align-left">
+			<div class="args"></div>
+		</div>
+		<hr />
+		<hr />
+	</section>
+
+	<section id="two" class="wrapper special">
+		<div class="inner">
+			<header class="major narrow">
+				<p>Found a bug? Had an idea?</p>
+			</header>
+			<form name="commentForm" id="commentForm">
+				<div class="row uniform 50%">
+					<div class="6u 12u$(xsmall)">
+						<input type="text" name="uuid" id="uuid" value=""
+							placeholder="Your UUID" />
+					</div>
+					<div class="12u$">
+						<textarea name="message" id="comment"
+							placeholder="How can I do better?" rows="3"></textarea>
+					</div>
+				</div>
+				<ul class="actions">
+					<li><input type="submit" name="submitCommentBtn"
+						class="special" value="Share" /></li>
+				</ul>
+
+			</form>		
+		</div>
+		<div class="formSubmitted"></div>	
+	</section>
+	
+	<div id="test1"></div>
+
+	<script>
+	
+    $("#test1").append($(
+            "<div>",
+            {
+                id: "test2",
+                text: "this is test2",
+                
+            }
+        ).css("position","absolute")
+        .css("left",100)
+        .css("top",40)
+        );
+    
+		$("#clearOutput").click(function(event) {
+			event.preventDefault();
+			$("#container").empty();
+		});		
+		
+		//when "search" button is clicked
+		$("#inputForm").submit(function(event) {
+			event.preventDefault();
+
+			var inputStr = $("#inputString").val();
+			//console.log("document.location.href: " + document.location.href);
+			parse(inputStr);
+
+		})
+		var parseDivCounter = 0;
+		var SERVER_ERROR = 500;
+		var NODE_WIDTH = 20;
+		var NODE_HEIGHT = 15;
+		
+		//figure out the server on which this is run
+		var cur_url = document.location.href;
+		var page_url = cur_url.replace("/index.html|/$", "/") + "crossword";
+		//var page_url = cur_url.replace("search.html", "") + "thmpsearch";
+		
+		var createPuzzle = function(wordsAr) {
+			if (inputStr == null || inputStr.length == 0)
+				return;			
+			
+			$.ajax({
+				url : page_url,
+				dataType : "json",
+				data : {
+					words : wordsAr
+				},
+				type : "GET",
+				cache: false
+			}).done(
+					function(response) {
+						//response is a collection of lists recording coordinates, 
+						//and some maps for which labels go with which words.
+						var container = $("#container");
+						
+						if(response == SERVER_ERROR){
+							container.prepend("<div>Oops, something internal went wrong. Working on it!</div>")
+							return;
+						}
+						//console.log("Returned from search request");
+						var results = "";
+						
+						//response will consists of list of strings that 
+						//are highest-ranked thms. Make it left-aligned!
+						$.each(response, function(index, item) {
+						
+							//process each PuzzleNodeCoordinates in list
+							if(item["row"] null || item["col"] == null){
+								continue;
+							}
+							
+							//draw at row and col coordinates.
+							($ ).append(
+									$("<div>",
+									{
+										class="r",
+										text: item["label"]
+									}
+									).css("position","absolute")
+								    .css("left", item["row"]*NODE_WIDTH)
+								    .css("top", item["col"]*NODE_WIDTH)
+								)
+							
+							
+							//append thm first, then hyp with less 
+							var parseDiv = "<span class='theorem'><strong>" + (index+1) + ". Theorem</strong> " + item["thmStr"] 
+								//+ "    <a href=\"" + item["arxivURL"] +"\">"+ item["srcFileName"] + "</a></span>";
+								+ "</span>";
+							//<a href="search.html">Theorem Search</a>							
+							if(item["hypStr"] != ""){
+								parseDiv += "<div class='context lessBold'> <span class=\"highlight\">Context</span>: . . ."
+								+item["hypStr"] + "</div>";
+							}
+							var metaDiv = "";
+							if(null != item["title"]){
+								metaDiv += "<span class=\"highlight\">Title</span>: "+item["title"] + ". ";
+							}
+							if(null != item["authors"]){
+								metaDiv += "<span class=\"highlight\">Authors</span>: "+item["authors"] + ". ";
+							}
+							if(null != item["date"]){
+								metaDiv += "<span class=\"highlight\">Date</span>: "+item["date"] + ".";
+							}
+							if("" !== metaDiv){
+								parseDiv += "<div class=lessBold>" + metaDiv + "</div>";
+							}
+							parseDiv += "<div><a href=\"" + item["arxivURL"] +"\" target=\"_blank\">"+ item["paperId"] + "</a></div>";
+							//some more space bewteen thms!? not an entire line
+							results += "<div>" + parseDiv + "</div>";
+							//results += "<div>" + parseDivHyp + "</div>";
+							
+							//container.append("<div>" + parseDiv + "</div>");
+						});
+						if(response != null){
+							var parseDivIdStr = "parseDiv" + parseDivCounter;
+							container.prepend("<div id='" +parseDivIdStr+ "'>"+ results + "</div><br></br>");	
+							container.prepend("<div><strong>Input</strong>: " + inputStr + "</div>");	
+							//would be better to separate out the the new search results, so don't typeset
+							//the part of container that's already typeset.
+							MathJax.Hub.Queue(//
+									//["Typeset", MathJax.Hub, parseDivIdStr]
+								
+								MathJax.Hub.Typeset(parseDivIdStr, function(){
+									mathJaxPostProcess(parseDivIdStr)
+									}
+								)						
+							);
+							/*MathJax.Hub.Queue(//["Typeset", MathJax.Hub, [parseDivIdStr,mathJaxPostProcess(parseDivIdStr)]]
+									mathJaxPostProcess(parseDivIdStr)
+								);*/
+							/*MathJax.Hub.TypeSet(
+									parseDivIdStr//, mathJaxPostProcess(parseDivIdStr)
+								);*/
+							parseDivCounter++;
+							//container.prepend("* * *");
+						}else{
+							container.prepend("<div>I've got nothing for you yet. Try again.</div>");
+						}
+					});
+
+		}//end of parse() function
+		
+		//post process mathjax to remove non-rendered elements, e.g. "???" and "\"
+		var mathJaxPostProcess = function(parseDivIdStr){
+			let parseDiv = document.querySelector("#"+parseDivIdStr);
+			
+			//remove slashes in text, for text-based macros.
+			let textElems = parseDiv.querySelectorAll("[class='theorem']");
+			removeSlashInText(textElems);
+			
+			textElems = parseDiv.querySelectorAll("[class='context lessBold']");
+			removeSlashInText(textElems);			
+			
+			let slashElems = parseDiv.querySelectorAll("[mathcolor='red']");
+			
+			for(var slashElem of slashElems){
+				//console.log("slashElem "+slashElem.textContent);
+				
+				let ancestorElem = slashElem.closest("[class='MathJax']");
+				if(null !== ancestorElem){
+					let desc = $(ancestorElem).find("[class='mtext']");//.first();
+					if(null !== desc){
+						
+						desc.each(function(index){
+							let replacementStr = $(this).text().replace(/\\/g,"");
+							$(this).text(replacementStr);
+							
+						});						
+						/*desc.get().textContent = replacementStr;
+						desc.get().innerHTML = replacementStr;
+						desc.get().innerText = replacementStr;
+						desc.get().outerHTML = replacementStr;*/
+						//desc.text(replacementStr);
+						
+						/****desc.contents().each(function(index){
+							$(this).text(replacementStr);
+						});*/						
+					}
+				}
+			}
+			
+		}//end of mathJaxPostProcess
+		
+		var removeSlashInText = function(elemList){
+			$(elemList).each(function(index1, thm){
+				$(thm.childNodes).each(function(index2, elem){
+					if(elem.nodeType === Node.TEXT_NODE){
+						elem.textContent = elem.textContent
+						.replace(/(?:\\(?:begin|end)\{[^}]*\})|\\/g,"");
+					}					
+				}
+				);
+			});
+		}
+		
+		$("#commentForm").submit(function(event) {
+			event.preventDefault();
+
+			var comment = $("#comment").val();
+			var uuid = $("#uuid").val();
+			sendComment(comment, uuid);
+			giveThanks();
+
+		})
+
+		var giveThanks = function() {
+			var container = $(".formSubmitted");
+			//pick something random
+			//if($('.formSubmittedParent > div.formSubmitted:contains(".*")').length > 0){
+			if ($('.formSubmitted > div').length > 0) {
+				container.html("<div>You rock!</div>");
+			} else {
+				container.html("<div>Thanks!</div>");
+			}
+
+		}
+
+		var sendComment = function(comment, uuid) {
+			if (comment == null || comment.length == 0)
+				return;
+			var cur_url = document.location.href;
+			var url = cur_url.replace("search.html", "") + "thmp1";
+			
+			$.ajax({
+				url : "http://localhost:8080/theoremSearch/thmp1",
+				//url : "http://localhost:80/theoremSearch/thmp1",
+				//url : "http://localhost:8080/ThmpServlet/thmp1",
+				dataType : "json",
+				data : {
+					"comment" : comment,
+					"uuid" : uuid
+				},
+				type : "POST",
+				success : function() {
+					$(".formSubmitted").html("<divd>Thanks!</div>");
+				}
+
+			});
+
+		}
+	</script>
+
+	<script src="assets/js/skel.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+
+</body>
+</html>
