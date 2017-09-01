@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -23,7 +24,8 @@ import crossword.Crossword.PuzzleNodeCoordinates;
 public class CrosswordServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = -4973253881670428154L;
-
+	private static final Logger logger = Logger.getLogger("CrosswordServlet");
+	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -50,9 +52,10 @@ public class CrosswordServlet extends HttpServlet {
 			//get parameters from request, in particular the string to parse
 			String[] wordsAr = request.getParameterValues("words");
 			
-			//logger.info("inputStr: " + inputStr);
+			logger.info("inputStr: " + Arrays.toString(wordsAr));
 			
 			if(wordsAr == null || wordsAr.length == 0) return;
+			
 			List<PuzzleNodeCoordinates> coordinatesList 
 				= Crossword.processSet(Arrays.asList(wordsAr));
 			
@@ -60,8 +63,8 @@ public class CrosswordServlet extends HttpServlet {
 			java.lang.reflect.Type listType = new TypeToken<ArrayList<Integer>>() {}.getType();
 			String json = gson.toJson( , listType);*/
 			
-			new Gson().toJson(coordinatesList, responseWriter);
-			
+			String parsedJson = new Gson().toJson(coordinatesList);			
+			responseWriter.write(parsedJson);
 			
 		}
 	
