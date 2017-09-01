@@ -132,14 +132,14 @@
 						//response is a collection of lists recording coordinates, 
 						//and some maps for which labels go with which words.
 						
+						console.log("Returned from GET request. Response: "+response);
+						
 						if(response == SERVER_ERROR){
 							container.prepend("<div>Oops, something internal went wrong. Working on it!</div>")
 							return;
 						}
-						console.log("Returned from GET request. Response: "+response);
 						
-						if(response != null){
-							
+						if(response != null){							
 							//response will consists of list of strings that 
 							//are highest-ranked thms. Make it left-aligned!
 							$.each(response, function(index, item) {

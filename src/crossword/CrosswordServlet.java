@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -25,11 +26,11 @@ public class CrosswordServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = -4973253881670428154L;
 	private static final Logger logger = Logger.getLogger("CrosswordServlet");
+	private static final Pattern COMMA_PATTERN = Pattern.compile("\\s*,\\s*");
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-	
+		super.init(config);	
 	} 
 	
 	 @Override
@@ -50,11 +51,12 @@ public class CrosswordServlet extends HttpServlet {
 			PrintWriter responseWriter = response.getWriter();
 			
 			//get parameters from request, in particular the string to parse
-			String[] wordsAr = request.getParameterValues("words");
+			String words = request.getParameter("words");
+			if(words == null || words.length() == 0) return;
+			
+			String[] wordsAr = COMMA_PATTERN.split(words);
 			
 			logger.info("inputStr: " + Arrays.toString(wordsAr));
-			
-			if(wordsAr == null || wordsAr.length == 0) return;
 			
 			List<PuzzleNodeCoordinates> coordinatesList 
 				= Crossword.processSet(Arrays.asList(wordsAr));
