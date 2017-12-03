@@ -4,8 +4,12 @@
 	<property name="build.dir" value="${basedir}/WEB-INF/classes/"/>	
 	<property name="src.dir" value="${basedir}/src/crossword"/>
 	<property name="lib.dir" value="${basedir}/WebContent/WEB-INF/lib/"/>
-	<property name="servlet.lib.dir" value="/Applications/eclipse/plugins"/>
-	<property name="tomcat.webapps" value="/Users/administrator/Documents/tomcat/webapps"/>
+	<!--<property name="servlet.lib.dir" value="/Applications/eclipse/plugins"/>-->
+	<!--<property name="servlet.lib.dir" value="/Users/yihed/Documents/tomcat/lib"/>-->
+	<property name="servlet.lib.dir" value="/Users/yihed/Documents/eclipse/plugins"/>
+	
+	<!--<property name="tomcat.webapps" value="/Users/administrator/Documents/tomcat/webapps"/>-->
+	<property name="tomcat.webapps" value="/Users/yihed/Documents/tomcat/webapps"/>
 	
 	<!--<property name="source_datadir" value="/Users/yihed/Documents/workspace/Other/src/thmp/data"/>
 	<property name="source_scriptsdir" value="/Users/yihed/Documents/workspace/Other/src/thmp/scripts"/>
@@ -53,6 +57,7 @@
 			<copy todir="${basedir}/WEB-INF">
 							<fileset dir="${basedir}/WebContent/WEB-INF">
 								  <include name="lib/"/>
+								<include name="web.xml"/>
 								 <exclude name="classes/"/>
 							</fileset>
 			</copy>
@@ -84,6 +89,9 @@
 			<exclude name="build/"/>
 			<exclude name="${war.name}"/>
 			<exclude name="**/*.war"/>
+			<exclude name=".settings/*"/>
+			<exclude name=".classpath"/>
+			<exclude name=".project"/>
 			<exclude name="build.xml"/>	
 		</jar>
 	</target>

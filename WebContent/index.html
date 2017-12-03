@@ -79,7 +79,7 @@
             "<div>",
             {
                 id: "test2",
-                text: "this is test2",
+                text: "hi",
                 
             }
         ).css("position","absolute")
@@ -108,6 +108,7 @@
 		
 		//figure out the server on which this is run
 		var cur_url = document.location.href;
+		//has form e.g. http://localhost:8080/crossword/crossword
 		var page_url = cur_url.replace("/index.html|/$", "/") + "crossword";
 		//var page_url = cur_url.replace("search.html", "") + "thmpsearch";
 		
@@ -115,15 +116,16 @@
 			if (wordsStr == null || wordsStr.length == 0)
 				return;			
 			
-			var commaPat = /\s*,\s*/
-			var wordsAr = wordsStr.split(commaPat);
-			console.log("Making GET request");
+			//must send request as string!
+			//var commaPat = /\s*,\s*/;
+			//var wordsAr = wordsStr.split(commaPat);
+			console.log("Making GET request, wordsAr: " + wordsStr);
 			
 			$.ajax({
 				url : page_url,
 				dataType : "json",
 				data : {
-					words : wordsAr
+					words : wordsStr
 				},
 				type : "GET",
 				cache: false
@@ -150,6 +152,7 @@
 									return true;
 								}
 								
+								
 								//draw at row and col coordinates.
 								$("#container").append(
 										$("<div>",
@@ -158,9 +161,9 @@
 											text: item["label"]
 										}
 										).css("position","absolute")
-									    .css("left", item["row"]*NODE_WIDTH)
-									    .css("top", item["col"]*NODE_WIDTH)
-									)
+									    .css("left", item["col"]*NODE_WIDTH)
+									    .css("top", item["row"]*NODE_HEIGHT)
+									);
 							});
 							
 						}else{

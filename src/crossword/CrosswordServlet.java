@@ -52,8 +52,12 @@ public class CrosswordServlet extends HttpServlet {
 			
 			//get parameters from request, in particular the string to parse
 			String words = request.getParameter("words");
-			if(words == null || words.length() == 0) return;
 			
+			//System.out.println("processing Get request! words: "+words);
+			
+			if(words == null || words.length() == 0) { 				
+				return;
+			}
 			String[] wordsAr = COMMA_PATTERN.split(words);
 			
 			logger.info("inputStr: " + Arrays.toString(wordsAr));
@@ -64,6 +68,7 @@ public class CrosswordServlet extends HttpServlet {
 			/*Gson gson = new GsonBuilder().create();
 			java.lang.reflect.Type listType = new TypeToken<ArrayList<Integer>>() {}.getType();
 			String json = gson.toJson( , listType);*/
+			System.out.println("coordinates obtained! " + coordinatesList);
 			
 			String parsedJson = new Gson().toJson(coordinatesList);			
 			responseWriter.write(parsedJson);
