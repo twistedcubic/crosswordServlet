@@ -103,14 +103,37 @@
 		})
 		
 		var SERVER_ERROR = 500;
-		var NODE_WIDTH = 20;
-		var NODE_HEIGHT = 15;
+		var NODE_WIDTH = 30;
+		var NODE_HEIGHT = 30;
 		
 		//figure out the server on which this is run
 		var cur_url = document.location.href;
 		//has form e.g. http://localhost:8080/crossword/crossword
-		var page_url = cur_url.replace("/index.html|/$", "/") + "crossword";
+		var page_url = cur_url.replace("index.html", "") + "crossword";
 		//var page_url = cur_url.replace("search.html", "") + "thmpsearch";
+		
+		$("#container").append(
+				$("<div>",
+				{
+					id: "rowWords",
+					text: "Row words:"
+				}
+				).css("position","absolute")
+				//dynamically adjust these!!
+			    .css("left", 200)
+			    .css("top", 450)
+		);
+		$("#container").append(
+				$("<div>",
+				{
+					id: "colWords",
+					text: "Column words:"
+				}
+				).css("position","absolute")
+				//dynamically adjust these!!
+			    .css("left", 400)
+			    .css("top", 450)
+		);
 		
 		var createPuzzle = function(wordsStr) {
 			if (wordsStr == null || wordsStr.length == 0)
@@ -119,7 +142,7 @@
 			//must send request as string!
 			//var commaPat = /\s*,\s*/;
 			//var wordsAr = wordsStr.split(commaPat);
-			console.log("Making GET request, wordsAr: " + wordsStr);
+			console.log("Making GET request, wordsStr: " + wordsStr);
 			
 			$.ajax({
 				url : page_url,
@@ -161,9 +184,24 @@
 											text: item["label"]
 										}
 										).css("position","absolute")
-									    .css("left", item["col"]*NODE_WIDTH)
-									    .css("top", item["row"]*NODE_HEIGHT)
-									);
+										//dynamically adjust these!!
+									    .css("left", item["col"]*NODE_WIDTH + 200)
+									    .css("top", item["row"]*NODE_HEIGHT + 150)
+								);
+								
+								console.log(item["rowWord"] + " item["colWord"] " +item["colWord"]);
+								//each coordinate has either rowWord or colWord, or neither, but never both
+								
+								if(undefined != item["rowWord"]){
+									let elemId = "rowWords";
+									let word = item["rowWord"];
+									appendWord(elemId, word);
+								}else if(undefined != item["colWord"]){
+									let elemId = "colWords";
+									let word = item["colWord"];
+									appendWord(elemId, word);
+								}
+								
 							});
 							
 						}else{
@@ -173,6 +211,23 @@
 
 		}//end of createPuzzle() function
 		
+		//id of element to attach to, and the word to attach
+		var appendWord = function(elemId, word){
+			$(elemId).append(
+					$("<div>",
+					{
+						//class: "square",
+						text: word
+					}
+					)
+					//should just append!
+					//.css("position","absolute")
+					//dynamically adjust these!!
+				    //.css("left", item["col"]*NODE_WIDTH + 200)
+				    //.css("top", item["row"]*NODE_HEIGHT + 150)
+			);
+			
+		}
 		
 		$("#commentForm").submit(function(event) {
 			event.preventDefault();
