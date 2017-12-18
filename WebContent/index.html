@@ -134,7 +134,28 @@
 			    .css("left", 400)
 			    .css("top", 450)
 		);
-		
+		$("#container").append(
+				$("<div>",
+				{
+					id: "rowHints",
+					text: "Row hints:"
+				}
+				).css("position","absolute")
+				//dynamically adjust these!!
+			    .css("left", 200)
+			    .css("top", 750)
+		);
+		$("#container").append(
+				$("<div>",
+				{
+					id: "colHints",
+					text: "Column hints:"
+				}
+				).css("position","absolute")
+				//dynamically adjust these!!
+			    .css("left", 400)
+			    .css("top", 750)
+		);
 		var createPuzzle = function(wordsStr) {
 			if (wordsStr == null || wordsStr.length == 0)
 				return;			
@@ -190,13 +211,14 @@
 								);
 								
 								console.log(item["rowWord"] + " item["colWord"] " +item["colWord"]);
-								//each coordinate has either rowWord or colWord, or neither, but never both
 								
+								//a coordinate can have either rowWord or colWord, or both
 								if(undefined != item["rowWord"]){
 									let elemId = "rowWords";
 									let word = item["rowWord"];
 									appendWord(elemId, word);
-								}else if(undefined != item["colWord"]){
+								}
+								if(undefined != item["colWord"]){
 									let elemId = "colWords";
 									let word = item["colWord"];
 									appendWord(elemId, word);

@@ -6,10 +6,11 @@
 	<property name="lib.dir" value="${basedir}/WebContent/WEB-INF/lib/"/>
 	<!--<property name="servlet.lib.dir" value="/Applications/eclipse/plugins"/>-->
 	<!--<property name="servlet.lib.dir" value="/Users/yihed/Documents/tomcat/lib"/>-->
-	<property name="servlet.lib.dir" value="/Users/yihed/Documents/eclipse/plugins"/>
+	<!--<property name="servlet.lib.dir" value="/Users/yihed/Documents/eclipse/plugins"/>-->
 	
-	<!--<property name="tomcat.webapps" value="/Users/administrator/Documents/tomcat/webapps"/>-->
-	<property name="tomcat.webapps" value="/Users/yihed/Documents/tomcat/webapps"/>
+	<property name="servlet.lib.dir" value="/Applications/EclipseEE.app/Contents/Eclipse/plugins"/>	
+	<property name="tomcat.webapps" value="/Users/administrator/Documents/tomcat/webapps"/>
+	<!--<property name="tomcat.webapps" value="/Users/yihed/Documents/tomcat/webapps"/>-->
 	
 	<!--<property name="source_datadir" value="/Users/yihed/Documents/workspace/Other/src/thmp/data"/>
 	<property name="source_scriptsdir" value="/Users/yihed/Documents/workspace/Other/src/thmp/scripts"/>
@@ -64,7 +65,7 @@
 			<copy todir="${basedir}">
 					<fileset dir="${basedir}/WebContent">
 							<include name="assets/"/>
-							<include name="css/"/>
+							<include name="css/*"/>
 							<include name="META-INF//"/>
 							<include name="**/*.html"/>
 					</fileset>
