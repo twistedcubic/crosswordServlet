@@ -224,6 +224,17 @@
 									appendWord(elemId, word);
 								}
 								
+								if(undefined != item["rowHint"]){
+									let elemId = "rowHints";
+									let hint = item["rowHint"];
+									appendWord(elemId, hint);
+								}
+								if(undefined != item["colHint"]){
+									let elemId = "colHints";
+									let hint = item["colHint"];
+									appendWord(elemId, hint);
+								}
+								
 							});
 							
 						}else{
