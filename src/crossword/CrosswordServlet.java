@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import crossword.Crossword.PuzzleNodeCoordinates;
 
@@ -64,14 +62,33 @@ public class CrosswordServlet extends HttpServlet {
 			
 			List<PuzzleNodeCoordinates> coordinatesList 
 				= Crossword.processSet(Arrays.asList(wordsAr));
+			//get max row and column numbers to place web row words and hints accordingly.
+			int rowMax = 0;
+			int colMax = 0;
+			for(PuzzleNodeCoordinates co : coordinatesList) {
+				int row = co.row();
+				int col = co.col();
+				if(row > rowMax) {
+					rowMax = row;
+				}
+				if(col > colMax) {
+					colMax = col;
+				}
+			}
 			
 			/*Gson gson = new GsonBuilder().create();
 			java.lang.reflect.Type listType = new TypeToken<ArrayList<Integer>>() {}.getType();
 			String json = gson.toJson( , listType);*/
-			System.out.println("coordinates obtained! " + coordinatesList);
+			//System.out.println("coordinates obtained! " + coordinatesList);
 			
-			String parsedJson = new Gson().toJson(coordinatesList);			
-			responseWriter.write(parsedJson);
+			String parsedJson = new Gson().toJson(coordinatesList);
+			String resultJson = "{"
+					+ "\"rowMax\": " + rowMax
+					+ ", \"colMax\": " + colMax
+					+ ", \"coordinates\": "+parsedJson
+					+ "}";
+			//logger.info("resultJson: " +resultJson);
+			responseWriter.write(resultJson);
 			
 		}
 	
