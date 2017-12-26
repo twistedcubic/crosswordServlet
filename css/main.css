@@ -21,6 +21,12 @@ body {
    bottom: 0;
 }
 
+.textSmall {
+   font-size: small;
+}
+.textLeft {
+   text-align: left;
+}
 .square div {
     border: 1px solid #000000;
     border-width: 1px 1px 1px 1px;

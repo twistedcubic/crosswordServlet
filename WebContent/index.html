@@ -26,6 +26,7 @@
 				<div class="row uniform 50%">
 					<div class="12u$">
 						<!--<textarea name="text" name="inputString" id="inputString" rows="2"></textarea>-->
+						<div class="textSmall textLeft">Enter comma-separated word-clue pairs, e.g. "kiwi, green, banana, yellow"</div>
 						<input type="text" name="inputString" id="inputString"  />
 					</div>
 				</div>
@@ -112,9 +113,9 @@
 		var SERVER_ERROR = 500;
 		var NODE_WIDTH = 35;
 		var NODE_HEIGHT = 35;
-		var TEXT_HEIGHT = 15;
-		var ROW_BASE = 350;
-		var COL_BASE = 210;
+		var TEXT_HEIGHT = 10;
+		var ROW_BASE = 200;
+		var COL_BASE = 150;
 		var COL_SEPARATOR_SPACE = 250;
 		
 		//figure out the server on which this is run
@@ -149,7 +150,7 @@
 			let wordsStartRow = hintsStartRow + TEXT_HEIGHT * rowColMax;
 			appendElemToContainer("rowWords", "Row words:", COL_BASE, wordsStartRow);
 			appendElemToContainer("colWords", "Column words:", COL_BASE+COL_SEPARATOR_SPACE, wordsStartRow);			
-			
+					
 		}
 		
 		var createPuzzle = function(wordsStr) {
