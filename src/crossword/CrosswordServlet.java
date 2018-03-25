@@ -58,7 +58,7 @@ public class CrosswordServlet extends HttpServlet {
 			}
 			String[] wordsAr = COMMA_PATTERN.split(words);
 			
-			logger.info("inputStr: " + Arrays.toString(wordsAr));
+			//logger.info("inputStr: " + Arrays.toString(wordsAr));
 			
 			List<PuzzleNodeCoordinates> coordinatesList 
 				= Crossword.processSet(Arrays.asList(wordsAr));

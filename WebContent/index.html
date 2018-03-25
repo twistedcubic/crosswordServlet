@@ -26,8 +26,9 @@
 				<div class="row uniform 50%">
 					<div class="12u$">
 						<!--<textarea name="text" name="inputString" id="inputString" rows="2"></textarea>-->
-						<div class="textSmall textLeft">Enter comma-separated word-clue pairs, e.g. "kiwi, green, banana, yellow"</div>
-						<input type="text" name="inputString" id="inputString"  />
+						<div class="textSmall textLeft">Enter comma-separated word-clue pairs, e.g. "apple, green, banana, yellow"</div>
+						<!--<input type="text" name="inputString" id="inputString"  />-->
+						<textarea name="inputString" id="inputString" rows="4" cols="40" placeholder="Enter text content" ></textarea>
 					</div>
 				</div>
 				<hr/>
@@ -85,17 +86,16 @@
 		var SERVER_ERROR = 500;
 		var NODE_WIDTH = 35;
 		var NODE_HEIGHT = 35;
-		var TEXT_HEIGHT = 10;
-		var ROW_BASE = 200;
+		var TEXT_HEIGHT = 20;
+		var ROW_BASE = 380;
 		var COL_BASE = 150;
-		var COL_SEPARATOR_SPACE = 250;
+		var COL_SEPARATOR_SPACE = 300;
 		
 		//figure out the server on which this is run
-		var cur_url = document.location.href;
+		//var cur_url = document.location.href;
 		//has form e.g. http://localhost:8080/crossword/crossword
-		var page_url = cur_url.replace("index.html", "") + "crossword";
-		//var page_url = cur_url.replace("search.html", "") + "thmpsearch";
-		
+		//var page_url = cur_url.replace("index.html", "") + "crossword";
+		var page_url = "http://104.131.18.153:8080/crossword/crossword";
 		/*append given element to #container at given positions, as a div. */
 		var appendElemToContainer = function(idStr, textStr, leftOffset, topOffset){
 			$("#container").append(
@@ -119,6 +119,7 @@
 			appendElemToContainer("colHints", "Column hints:", COL_BASE+COL_SEPARATOR_SPACE, hintsStartRow);
 			
 			let rowColMax = rowMax > colMax ? rowMax : colMax;
+			//let wordsStartRow = hintsStartRow + TEXT_HEIGHT * rowColMax;
 			let wordsStartRow = hintsStartRow + TEXT_HEIGHT * rowColMax;
 			appendElemToContainer("rowWords", "Row words:", COL_BASE, wordsStartRow);
 			appendElemToContainer("colWords", "Column words:", COL_BASE+COL_SEPARATOR_SPACE, wordsStartRow);			
@@ -220,7 +221,7 @@
 
 		}//end of createPuzzle() function
 		
-		//id of element to attach to, and the word to attach
+		//id of element to attach to, and the word to attach. Truncate hints so to not overflow.
 		var appendWord = function(elemId, word, wordLabel){
 			$("#"+elemId).append(
 					$("<div>",
@@ -230,7 +231,7 @@
 					}
 					)
 					.css("font-weight", "normal")
-					.css("width", COL_SEPARATOR_SPACE - 30 + "px")
+					.css("width", COL_SEPARATOR_SPACE + "px")
 					.css("white-space", "nowrap")
 					.css("overflow", "hidden")
 					.css("text-overflow", "ellipsis")
