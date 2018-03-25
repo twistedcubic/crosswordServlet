@@ -55,34 +55,6 @@
 	
 	</section>
 
-	<!-- <section id="two" class="wrapper special">
-		<div class="inner">
-			<header class="major narrow">
-				<p>Found a bug? Had an idea?</p>
-			</header>
-			<form name="commentForm" id="commentForm">
-				<div class="row uniform 50%">
-					<div class="6u 12u$(xsmall)">
-						<input type="text" name="uuid" id="uuid" value=""
-							placeholder="Your UUID" />
-					</div>
-					<div class="12u$">
-						<textarea name="message" id="comment"
-							placeholder="How can I do better?" rows="3"></textarea>
-					</div>
-				</div>
-				<ul class="actions">
-					<li><input type="submit" name="submitCommentBtn"
-						class="special" value="Share" /></li>
-				</ul>
-
-			</form>		
-		</div>
-		<div class="formSubmitted"></div>	
-	</section>-->
-	
-	<!-- <div id="test1"></div> -->
-
 	<script>
 	
     $("#test1").append($(
@@ -160,7 +132,7 @@
 			//must send request as string!
 			//var commaPat = /\s*,\s*/;
 			//var wordsAr = wordsStr.split(commaPat);
-			console.log("Making GET request, wordsStr: " + wordsStr);
+			//console.log("Making GET request, wordsStr: " + wordsStr);
 			
 			$.ajax({
 				url : page_url,
@@ -175,7 +147,7 @@
 						//response is a collection of lists recording coordinates, 
 						//and some maps for which labels go with which words.
 						
-						console.log("Returned from GET request. Response: "+response);
+						//console.log("Returned from GET request. Response: "+response);
 						
 						if(response == SERVER_ERROR){
 							container.prepend("<div>Oops, something internal went wrong. Working on it!</div>")
@@ -194,7 +166,7 @@
 							//are highest-ranked thms. Make it left-aligned!
 							$.each(coordinates, function(index, item) {
 							
-								console.log("row col " + item["row"] +" " + item["col"]);
+								//console.log("row col " + item["row"] +" " + item["col"]);
 								//process each PuzzleNodeCoordinates in list
 								if(item["row"] == null || item["col"] == null){
 									return true;
@@ -214,7 +186,7 @@
 									    .css("top", item["row"]*NODE_HEIGHT + ROW_BASE)
 								);
 								
-								console.log(item["rowWord"] + " item['colWord'] " +item["colWord"]);
+								//console.log(item["rowWord"] + " item['colWord'] " +item["colWord"]);
 								
 								//a coordinate can have either rowWord or colWord, or both
 								if(undefined != item["rowWord"]){
